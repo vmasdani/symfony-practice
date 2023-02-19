@@ -3,7 +3,10 @@
 
   const store = reactive({
     count: 0,
+    serverSideData: null
   })
+
+  store.serverSideData = JSON.parse (document.getElementById('server-side-data').value)
 
   createApp({
     store
@@ -12,17 +15,34 @@
 
 <div>
   <h1>
-    {{ myVar }}
+    {{ myVar}}
   </h1>
-  <div>
-    {{ "{{ JSON.stringify(store) }}" }}
-  </div>
 
+  <input type="hidden" id="server-side-data" value="{{ employees }}" />
+
+  <div> Count: {{ '{{ store.count }}' }}</div>
   <div>
     <button @click="{
-              store.count++
-            }">
+      store.count++
+    }">
       Increment
     </button>
   </div>
+
+  <table border="2">
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Created</th>
+      <th>Updated </th>
+    </tr>
+    <tr v-for="e in store.serverSideData">
+      <td>{{ "{{ e.id }}" }}</td>
+      <td style="padding: 5px">{{ "{{ e.name }}" }}</td>
+      <td style="padding: 5px">{{ "{{ e.created }}" }}</td>
+      <td style="padding: 5px">{{ "{{ e.updated }}" }}</td>
+        
+    </ditr>
+  </table>
+  
 </div>
