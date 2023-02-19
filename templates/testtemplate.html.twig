@@ -1,0 +1,28 @@
+<script type="module">
+  import { createApp, reactive } from 'https://unpkg.com/petite-vue?module'
+
+  const store = reactive({
+    count: 0,
+  })
+
+  createApp({
+    store
+  }).mount()
+</script>
+
+<div>
+  <h1>
+    {{ myVar }}
+  </h1>
+  <div>
+    {{ "{{ JSON.stringify(store) }}" }}
+  </div>
+
+  <div>
+    <button @click="{
+              store.count++
+            }">
+      Increment
+    </button>
+  </div>
+</div>
