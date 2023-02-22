@@ -9,6 +9,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Persistence\ObjectRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -57,13 +58,22 @@ class TestController extends AbstractController
     #[Route('/persist-employee')]
     function persisteEmployee(
         ManagerRegistry $doctrine,
-        SerializerInterface $serializer
+        SerializerInterface $serializer,
+        Request $request
     ): Response
     {
         $em = $doctrine->getManager();
 
         $e = new Employee();
         $e->setName("Hello " . date('c'));
+
+        if ($request->query->get('secret_code') != $_ENV['APP_SECRET']){
+            return new Response(
+            'Whoops. secret_code invalid. Look your .env file for the code..',
+                    Response::HTTP_UNAUTHORIZED,
+               
+            );
+        }
 
         $em->persist($e);
         $em->flush();
